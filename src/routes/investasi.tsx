@@ -3,6 +3,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Suspense, useEffect, useState } from "react";
 import { Line, LineChart, ResponsiveContainer, YAxis } from "recharts";
 import { RefreshCw } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { AppShell } from "@/components/saku/AppShell";
 import { INSTRUMENTS, INVESTMENT_TABS, formatChange, formatStatPrice, isEducationCategory, marketSchedule, type InvestmentCategory, type InstrumentStats } from "@/lib/investment-stats";
@@ -63,6 +64,7 @@ function Statistics({ category }: { category: InvestmentCategory }) {
             {schedule?.next && <p className="mt-1 text-muted-foreground">{schedule.next}</p>}
             {hasData ? <><p className="mt-2 text-muted-foreground">Yahoo Finance · {sourceFresh ? "Harga terakhir" : "Data dapat tertunda"}</p><p className="text-muted-foreground">{updated} WIB</p></> : <p className="mt-2 leading-4 text-muted-foreground">{stats?.error ?? "Data belum tersedia."}</p>}
           </div>}
+          {category === "reksadana" && <Button size="sm" className="mt-3 h-9 w-full rounded-lg text-xs" onClick={() => toast.info("Fitur beli reksadana sedang dikembangkan. Nantikan, ya!")}>Beli</Button>}
         </article>;
       })}
     </div>
