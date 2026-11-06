@@ -12,9 +12,7 @@ export const INSTRUMENTS: Instrument[] = [
   ...["BBCA", "BBRI", "TLKM", "ASII", "GOTO", "BREN", "CUAN", "AMMN", "BMRI", "BBNI"].map((id) => ({ id, name: id, category: "saham" as const, symbol: `${id}.JK`, detail: "Bursa Efek Indonesia · IDR / lembar" })),
   { id: "BTC", name: "BTC · Bitcoin", category: "crypto", symbol: "BTC-USD", detail: "Kripto · USD · volatilitas tinggi" },
   { id: "ETH", name: "ETH · Ethereum", category: "crypto", symbol: "ETH-USD", detail: "Kripto · USD · volatilitas tinggi" },
-  { id: "antam", name: "Emas Antam 1gr", category: "emas", detail: "Logam Mulia · IDR / 1 gram" },
-  { id: "antam-5gr", name: "Emas Antam 5gr", category: "emas", detail: "Logam Mulia · IDR / 5 gram" },
-  { id: "pegadaian", name: "Emas Pegadaian", category: "emas", detail: "Pegadaian · IDR / gram" },
+  { id: "emas-digital", name: "Emas Digital", category: "emas", detail: "Emas digital · IDR / gram · harga live" },
 ];
 export interface PricePoint { time: number; price: number }
 export interface InstrumentStats {
@@ -27,11 +25,8 @@ export const EDUCATION_STATS: InstrumentStats[] = [
   { id: "rd-pt", price: 1734, month: 0.45, year: 6.8, values: [1720,1725,1730,1732,1734] },
   { id: "rd-cp", price: 2105, month: 1.2, year: 8.1, values: [2050,2070,2090,2080,2105] },
   { id: "rd-sh", price: 1890, month: 2.1, year: 12.4, values: [1800,1820,1850,1870,1890] },
-  { id: "antam", price: 1420000, month: 0.8, year: 18.5, values: [1380000,1395000,1405000,1410000,1420000] },
-  { id: "antam-5gr", price: 6950000, month: null, year: null, values: [] },
-  { id: "pegadaian", price: 1415000, month: null, year: null, values: [] },
 ].map(({ values, ...stats }) => ({ ...stats, currency: "IDR", history: values.map((price, time) => ({ time, price })), updatedAt: null, error: null }));
-export const isEducationCategory = (category: InvestmentCategory) => category === "reksadana" || category === "emas";
+export const isEducationCategory = (category: InvestmentCategory) => category === "reksadana";
 export const educationStats = (category: InvestmentCategory) => EDUCATION_STATS.filter((stats) => INSTRUMENTS.some((instrument) => instrument.id === stats.id && instrument.category === category));
 export function emptyStats(instrument: Instrument): InstrumentStats {
   const example = EDUCATION_STATS.find((stats) => stats.id === instrument.id);
@@ -41,6 +36,7 @@ export function emptyStats(instrument: Instrument): InstrumentStats {
 }
 export function marketSchedule(category: InvestmentCategory, now: Date) {
   if (category === "crypto") return { open: true, label: "Buka · 24/7", next: "" };
+  if (category === "emas") return { open: true, label: "Live · Emas global", next: "" };
   if (category !== "saham") return { open: false, label: "Pembaruan harian", next: "" };
   const wib = new Date(now.getTime() + 7 * 60 * 60 * 1000);
   const day = wib.getUTCDay();
@@ -53,7 +49,7 @@ export function marketSchedule(category: InvestmentCategory, now: Date) {
   return { open: false, label: "Tutup", next: `Buka lagi ${days[next.getUTCDay()]} 09.00 WIB` };
 }
 export function refreshInterval(category: InvestmentCategory, now: Date) {
-  return category === "crypto" || (category === "saham" && marketSchedule(category, now).open) ? 60_000 : false;
+  return category === "crypto" || category === "emas" || (category === "saham" && marketSchedule(category, now).open) ? 60_000 : false;
 }
 export function changeSince(points: PricePoint[], price: number, target: number): number | null {
   const previous = points.filter((p) => p.time <= target).at(-1);

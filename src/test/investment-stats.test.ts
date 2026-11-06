@@ -6,7 +6,7 @@ describe("investment statistics", () => {
     expect(INSTRUMENTS.filter((a) => a.category === "saham").map((a) => a.id)).toEqual(["BBCA", "BBRI", "TLKM", "ASII", "GOTO", "BREN", "CUAN", "AMMN", "BMRI", "BBNI"]);
     expect(INSTRUMENTS.filter((a) => a.category === "reksadana")).toHaveLength(4);
     expect(INSTRUMENTS.filter((a) => a.category === "crypto").map((a) => a.id)).toEqual(["BTC", "ETH"]);
-    expect(INSTRUMENTS.filter((a) => a.category === "emas").map((a) => a.name)).toEqual(["Emas Antam 1gr", "Emas Antam 5gr", "Emas Pegadaian"]);
+    expect(INSTRUMENTS.filter((a) => a.category === "emas").map((a) => a.name)).toEqual(["Emas Digital"]);
   });
   it("opens stocks at 09.00 WIB and closes at 16.00 WIB weekdays", () => {
     expect(marketSchedule("saham", new Date("2026-10-09T01:59:00Z")).open).toBe(false);
@@ -27,11 +27,8 @@ describe("investment statistics", () => {
     ["rd-pt", 1734, 0.45, 6.8, [1720,1725,1730,1732,1734]],
     ["rd-cp", 2105, 1.2, 8.1, [2050,2070,2090,2080,2105]],
     ["rd-sh", 1890, 2.1, 12.4, [1800,1820,1850,1870,1890]],
-    ["antam", 1420000, 0.8, 18.5, [1380000,1395000,1405000,1410000,1420000]],
-    ["antam-5gr", 6950000, null, null, []],
-    ["pegadaian", 1415000, null, null, []],
   ])("keeps the requested educational values for %s", (id, price, month, year, history) => {
-    const stats = [...educationStats("reksadana"), ...educationStats("emas")].find((a) => a.id === id);
+    const stats = educationStats("reksadana").find((a) => a.id === id);
     expect(stats).toMatchObject({ price, month, year, currency: "IDR" });
     expect(stats?.history.map((point) => point.price)).toEqual(history);
   });
