@@ -68,7 +68,7 @@ function Beranda() {
       </Link>
 
       <Panel className="mt-4">
-        <h2 className="font-bold">Alokasi 5 Kantong</h2>
+        <h2 className="font-bold">Alokasi 4 Kantong</h2>
         <Donut sisa={s.sisa} alokasi={profile.alokasi} />
         <div className="flex flex-wrap justify-center gap-x-3 gap-y-1">
           {POCKETS.map((p) => (

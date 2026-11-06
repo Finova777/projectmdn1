@@ -9,9 +9,9 @@ import { DEFAULT_ALOKASI, sortir, useProfile, type PocketKey } from "@/lib/saku"
 export const Route = createFileRoute("/alokasi")({
   head: () => ({
     meta: [
-      { title: "Alokasi 5 Kantong — EASY FINMA" },
+      { title: "Alokasi 4 Kantong — EASY FINMA" },
       { name: "description", content: "Atur persen atau rupiah tiap kantong: darurat, tabungan, investasi, reward." },
-      { property: "og:title", content: "Alokasi 5 Kantong — EASY FINMA" },
+      { property: "og:title", content: "Alokasi 4 Kantong — EASY FINMA" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:description", content: "Atur persen atau rupiah tiap kantong keuanganmu." },
