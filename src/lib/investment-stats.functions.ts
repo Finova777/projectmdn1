@@ -8,10 +8,12 @@ interface YahooChart {
 
 interface YahooSeries { price: number; updatedAt: number; currency: string; points: PricePoint[] }
 
-// Troy ounce to gram — global gold spot (XAU) is quoted per troy ounce.
+// Troy ounce to gram — global gold is quoted per troy ounce.
 const GRAMS_PER_TROY_OUNCE = 31.1034768;
-const GOLD_SPOT_SYMBOL = "XAUUSD=X"; // USD per troy ounce
-const USD_IDR_SYMBOL = "IDR=X"; // Rupiah per 1 USD
+// Tried in order; the first that returns data wins. GC=F (COMEX futures) is the most
+// reliable gold series on Yahoo's chart API; XAU spot often returns empty from datacenters.
+const GOLD_SYMBOLS = ["GC=F", "XAUUSD=X"]; // USD per troy ounce
+const USD_IDR_SYMBOLS = ["IDR=X", "USDIDR=X"]; // Rupiah per 1 USD
 
 // Public market data only. Symbols are selected from the fixed catalog, never caller-supplied URLs.
 async function fetchYahooSeries(symbol: string): Promise<YahooSeries | null> {
@@ -33,12 +35,21 @@ async function fetchYahooSeries(symbol: string): Promise<YahooSeries | null> {
   } catch { return null; }
 }
 
-// Digital gold (Rp/gram) tracks global spot: gold (USD/oz) × USD→IDR ÷ grams-per-ounce.
+// Returns the first symbol in the list that Yahoo answers with a usable series.
+async function fetchFirstSeries(symbols: string[]): Promise<YahooSeries | null> {
+  for (const symbol of symbols) {
+    const series = await fetchYahooSeries(symbol);
+    if (series) return series;
+  }
+  return null;
+}
+
+// Digital gold (Rp/gram) tracks global gold: gold (USD/oz) × USD→IDR ÷ grams-per-ounce.
 async function getDigitalGold(): Promise<InstrumentStats[]> {
   const instrument = INSTRUMENTS.find((a) => a.id === "emas-digital");
   const fallback = instrument ? emptyStats(instrument) : null;
   if (!instrument || !fallback) return fallback ? [fallback] : [];
-  const [gold, fx] = await Promise.all([fetchYahooSeries(GOLD_SPOT_SYMBOL), fetchYahooSeries(USD_IDR_SYMBOL)]);
+  const [gold, fx] = await Promise.all([fetchFirstSeries(GOLD_SYMBOLS), fetchFirstSeries(USD_IDR_SYMBOLS)]);
   if (!gold || !fx) return [fallback];
   // Rupiah per USD on (or just before) a given timestamp, so each historical gold point uses the rate of its day.
   const rateAt = (time: number) => {
