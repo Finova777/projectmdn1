@@ -103,7 +103,7 @@ export function toPockets(raw: Record<string, unknown> | undefined): Record<Pock
     const v = raw[key];
     if (typeof v === "number" && Number.isFinite(v)) out[key] = v;
   }
-  const h = raw.hidup;
+  const h = raw["hidup"];
   if (typeof h === "number" && Number.isFinite(h) && h > 0) out.tabungan = Math.round((out.tabungan + h) * 10) / 10;
   return out;
 }
