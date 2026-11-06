@@ -16,7 +16,7 @@ export const jobLabel = (j: Job) => JOBS.find((x) => x.v === j)?.l ?? j;
 
 export type InsKey = "kesehatan" | "kendaraan" | "properti" | "lainnya";
 export type Vehicle = "tidak" | "motor" | "mobil";
-export type PocketKey = "darurat" | "hidup" | "tabungan" | "investasi" | "reward";
+export type PocketKey = "darurat" | "tabungan" | "investasi" | "reward";
 
 export interface Profile {
   nama: string;
@@ -41,11 +41,10 @@ export const POCKETS: { key: PocketKey; label: string; color: string; soft: stri
   { key: "darurat", label: "Dana Darurat", color: "var(--darurat)", soft: "var(--darurat-soft)", desc: "Cadangan 3-6x pengeluaran" },
   { key: "investasi", label: "Investasi", color: "var(--investasi)", soft: "var(--investasi-soft)", desc: "Tumbuh untuk masa depan" },
   { key: "tabungan", label: "Tabungan", color: "var(--tabungan)", soft: "var(--tabungan-soft)", desc: "Tujuan jangka pendek" },
-  { key: "hidup", label: "Biaya Hidup", color: "var(--hidup)", soft: "var(--hidup-soft)", desc: "Kebutuhan tambahan" },
   { key: "reward", label: "Self Reward", color: "var(--reward)", soft: "var(--reward-soft)", desc: "Hadiah untuk dirimu" },
 ];
 
-export const DEFAULT_ALOKASI: Record<PocketKey, number> = { darurat: 20, investasi: 20, tabungan: 20, hidup: 30, reward: 10 };
+export const DEFAULT_ALOKASI: Record<PocketKey, number> = { darurat: 30, investasi: 30, tabungan: 30, reward: 10 };
 
 export const emptyProfile = (): Profile => ({
   nama: "",
@@ -96,6 +95,19 @@ export const short = (n: number) => {
   return s + Math.round(a);
 };
 
+/** Living costs are already part of expenses, so a legacy "hidup" share moves into Tabungan. */
+export function toPockets(raw: Record<string, unknown> | undefined): Record<PocketKey, number> {
+  const out = { ...DEFAULT_ALOKASI };
+  if (!raw) return out;
+  for (const { key } of POCKETS) {
+    const v = raw[key];
+    if (typeof v === "number" && Number.isFinite(v)) out[key] = v;
+  }
+  const h = raw["hidup"];
+  if (typeof h === "number" && Number.isFinite(h) && h > 0) out.tabungan = Math.round((out.tabungan + h) * 10) / 10;
+  return out;
+}
+
 const KEY = "finma_profile";
 const EXPENSE_FIELDS = ["tinggal", "utilitas", "makan", "cicilan", "transport", "pajak"] as const;
 export function loadProfile(): Profile | null {
@@ -111,14 +123,11 @@ export function loadProfile(): Profile | null {
       if (typeof value === "number" && Number.isFinite(value)) profile[field] = value;
     }
     const allocation = readStoredObject(localStorage, "finma_allocation");
-    profile.alokasi = { ...DEFAULT_ALOKASI, ...profile.alokasi };
-    for (const { key } of POCKETS) {
-      const value = allocation?.[key];
-      if (typeof value === "number" && Number.isFinite(value)) profile.alokasi[key] = value;
-    }
+    profile.alokasi = toPockets(profile.alokasi);
+    if (allocation) profile.alokasi = toPockets(allocation);
     // Populate the new slices for the existing combined legacy profile.
     if (!expenses) localStorage.setItem("finma_expenses", JSON.stringify(Object.fromEntries(EXPENSE_FIELDS.map((key) => [key, profile[key]]))));
-    if (!allocation) localStorage.setItem("finma_allocation", JSON.stringify(profile.alokasi));
+    if (!allocation || "hidup" in allocation) localStorage.setItem("finma_allocation", JSON.stringify(profile.alokasi));
     localStorage.setItem(KEY, JSON.stringify(profile));
     return profile;
   } catch {

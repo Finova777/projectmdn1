@@ -5,7 +5,7 @@ import { clearProfile, emptyProfile, loadProfile, saveProfile } from "../lib/sak
 beforeEach(() => localStorage.clear());
 describe("FINMA storage migration", () => {
   it.each(["saku_profile", "saku5-profile"])("migrates %s without losing money or allocation", (key) => {
-    const profile = { ...emptyProfile(), nama: "Finma", gaji: 8000000, makan: 1200000, tabungan: 3250000, alokasi: { darurat: 10, investasi: 25, tabungan: 30, hidup: 25, reward: 10 } };
+    const profile = { ...emptyProfile(), nama: "Finma", gaji: 8000000, makan: 1200000, tabungan: 3250000, alokasi: { darurat: 10, investasi: 25, tabungan: 55, reward: 10 } };
     localStorage.setItem(key, JSON.stringify(profile));
     expect(loadProfile()).toEqual(profile);
     expect(JSON.parse(localStorage.getItem("finma_profile") ?? "null")).toEqual(profile);

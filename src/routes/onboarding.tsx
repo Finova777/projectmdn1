@@ -11,7 +11,7 @@ export const Route = createFileRoute("/onboarding")({
   head: () => ({
     meta: [
       { title: "Mulai — EASY FINMA" },
-      { name: "description", content: "Isi profil, pengeluaran, dan asuransi untuk rekomendasi alokasi 5 kantong." },
+      { name: "description", content: "Isi profil, pengeluaran, dan asuransi untuk rekomendasi alokasi 4 kantong." },
       { property: "og:title", content: "Mulai — EASY FINMA" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
