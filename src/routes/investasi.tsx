@@ -64,7 +64,7 @@ function Statistics({ category }: { category: InvestmentCategory }) {
             {schedule?.next && <p className="mt-1 text-muted-foreground">{schedule.next}</p>}
             {hasData ? <><p className="mt-2 text-muted-foreground">Yahoo Finance · {sourceFresh ? "Harga terakhir" : "Data dapat tertunda"}</p><p className="text-muted-foreground">{updated} WIB</p></> : <p className="mt-2 leading-4 text-muted-foreground">{stats?.error ?? "Data belum tersedia."}</p>}
           </div>}
-          {category === "reksadana" && <Button size="sm" className="mt-3 h-9 w-full rounded-lg text-xs" onClick={() => toast.info("Fitur beli reksadana sedang dikembangkan. Nantikan, ya!")}>Beli</Button>}
+          <Button size="sm" className="mt-3 h-9 w-full rounded-lg text-xs" onClick={() => toast.info(`Fitur beli ${INVESTMENT_TABS.find((t) => t.key === category)?.label ?? "investasi"} sedang dikembangkan. Nantikan, ya!`)}>Beli</Button>
         </article>;
       })}
     </div>
