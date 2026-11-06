@@ -38,10 +38,11 @@ Bagi sisa bebas ke 4 kantong (persen, total 100): darurat (Dana Darurat), invest
           },
         },
       });
-      const text = (res.output ?? [])
-        .flatMap((o) => ("content" in o && Array.isArray(o.content) ? o.content : []))
-        .map((c) => (c && typeof c === "object" && "text" in c ? String(c.text) : ""))
-        .join("");
+      let text = "";
+      for (const o of res.output ?? []) {
+        if (o.type !== "message") continue;
+        for (const c of o.content) if (c.type === "output_text") text += c.text;
+      }
       const parsed = JSON.parse(text) as Record<string, unknown>;
       return {
         ok: true as const,
