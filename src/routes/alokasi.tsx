@@ -10,7 +10,7 @@ export const Route = createFileRoute("/alokasi")({
   head: () => ({
     meta: [
       { title: "Alokasi 5 Kantong — EASY FINMA" },
-      { name: "description", content: "Atur persen atau rupiah tiap kantong: darurat, hidup, tabungan, investasi, reward." },
+      { name: "description", content: "Atur persen atau rupiah tiap kantong: darurat, tabungan, investasi, reward." },
       { property: "og:title", content: "Alokasi 5 Kantong — EASY FINMA" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

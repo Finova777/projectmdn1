@@ -11,7 +11,7 @@ export function setPocket(value: Record<PocketKey, number>, k: PocketKey, pct: n
 }
 
 export function splitEven(): Record<PocketKey, number> {
-  return { darurat: 20, investasi: 20, tabungan: 20, hidup: 30, reward: 10 };
+  return { ...DEFAULT_ALOKASI };
 }
 
 export function allocStatus(value: Record<PocketKey, number>, base: number) {
@@ -97,8 +97,7 @@ export const POCKET_STORAGE: Record<PocketKey, { where: string; why: string }> =
   darurat: { where: "Bank Digital (Jago / Blu)", why: "Kantong terpisah, bunga lebih tinggi, bisa ditarik kapan saja" },
   investasi: { where: "Bibit / Ajaib", why: "Reksadana & saham mulai nominal kecil, terdaftar OJK" },
   tabungan: { where: "Bank Konvensional (BCA / Mandiri)", why: "Aman untuk tujuan jangka pendek, mudah tarik tunai" },
-  hidup: { where: "E-Wallet (GoPay / OVO)", why: "Praktis untuk makan, transport & belanja harian" },
-  reward: { where: "E-Wallet / Kantong Jago (ShopeePay / Jago)", why: "Terpisah dari biaya hidup supaya tidak kebablasan" },
+  reward: { where: "E-Wallet / Kantong Jago (ShopeePay / Jago)", why: "Terpisah dari uang harian supaya tidak kebablasan" },
 };
 
 export function PocketStorageSuggestions({ sisa, value }: { sisa: number; value: Record<PocketKey, number> }) {
