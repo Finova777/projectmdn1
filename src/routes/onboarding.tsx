@@ -68,7 +68,7 @@ function Onboarding() {
   return (
     <div className="mx-auto min-h-screen max-w-md px-4 pb-10 pt-6">
       <p className="text-lg font-extrabold">EASY FINMA</p>
-      <p className="text-[11px] text-muted-foreground">Financial Management</p>
+      <p className="text-[11px] text-muted-foreground">Financial Management ...</p>
       <h1 className="mt-1 text-2xl font-extrabold">{STEPS[step]}</h1>
       <div className="mt-3 flex gap-1.5">
         {STEPS.map((_, i) => (
