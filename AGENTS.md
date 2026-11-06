@@ -14,3 +14,4 @@
 - Keep investment statistics separate from legacy simulation trading state; educational categories use a browser-safe static catalog without API calls, while public server functions fetch allowlisted market symbols for other categories and report unavailability honestly.
 - Render brand metadata through TanStack route heads and the web manifest; there is no index.html in the SSR project.
 - Migrate legacy browser storage on first read, preserve newer values and malformed originals, and synchronize profile expense/allocation slices on save to avoid data loss.
+- AI allocation advice runs only in a server function (`src/lib/goal-advisor.functions.ts`) via the AI Gateway SDK with a strict JSON schema, and the split is re-normalized to 100% before reaching the UI — keeps prompts server-side and the result always valid.
