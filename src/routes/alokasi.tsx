@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { AppShell, Loading, Panel } from "@/components/saku/AppShell";
 import { AllocationEditor, PocketStorageSuggestions } from "@/components/saku/AllocationEditor";
+import { GoalAdvisor } from "@/components/saku/GoalAdvisor";
 import { Donut } from "@/components/saku/Donut";
 import { DEFAULT_ALOKASI, sortir, useProfile, type PocketKey } from "@/lib/saku";
 
@@ -29,6 +30,7 @@ function Alokasi() {
   return (
     <AppShell title="Alokasi">
       <Panel className="mb-4"><Donut sisa={s.sisa} alokasi={val} /></Panel>
+      <GoalAdvisor profile={profile} onApply={setVal} />
       <p className="mb-2 text-xs text-muted-foreground">Atur bebas tiap kantong dalam Rp atau % (dari sisa gaji bebas). Kantong lain tidak ikut berubah. Tekan Simpan Alokasi agar Beranda ikut update.</p>
       <AllocationEditor
         sisa={s.sisa}

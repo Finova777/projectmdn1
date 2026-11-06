@@ -24,3 +24,11 @@ describe("no living-cost pocket", () => {
     expect(toPockets({ darurat: 20, investasi: 20, tabungan: 20, hidup: 30, reward: 10 })).toEqual({ darurat: 20, investasi: 20, tabungan: 50, reward: 10 });
   });
 });
+import { normalizeSplit } from "@/lib/goal-advisor";
+describe("AI split normalization", () => {
+  it("scales to exactly 100 whole percent", () => {
+    const r = normalizeSplit({ darurat: 1, investasi: 1, tabungan: 1, reward: 0 });
+    expect(r.darurat + r.investasi + r.tabungan + r.reward).toBe(100);
+    expect(r.reward).toBe(0);
+  });
+});
