@@ -11,3 +11,7 @@
 - [x] Pasang data edukasi statis reksadana/emas dan uji nilai serta grafik.
 - [x] Rebranding EASY FINMA, metadata, manifest, dan migrasi penyimpanan lama tanpa kehilangan data.
 - [x] Ganti seluruh ikon dengan ikon handmade FINMA final (rounded transparan 1024px): favicon, 192, 512, 1024, apple-touch, manifest, navbar.
+- [x] Pindahkan AI ke Google Gemini (GEMINI_API_KEY) untuk "Saran AI", lepas dari Lovable AI Gateway.
+- [x] Tambah Chat AI (FINMA AI) berbasis Gemini: widget mengambang di halaman utama, server-side, khusus topik keuangan.
+- [x] Tambah Premium (simulasi): nonaktifkan iklan + Chat AI tanpa batas, toggle di Profil, tersimpan di browser.
+- [x] Tambah iklan saat buka aplikasi (promo Premium in-app) sekali per sesi, bisa dilewati, hilang untuk pengguna Premium.

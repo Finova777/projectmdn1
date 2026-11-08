@@ -1,6 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Home, PieChart, TrendingUp, ShieldCheck, User } from "lucide-react";
 import type { ReactNode } from "react";
+import { AdOnOpen } from "@/components/saku/AdOnOpen";
+import { ChatAI } from "@/components/saku/ChatAI";
 
 const NAV = [
   { to: "/", label: "Beranda", icon: Home },
@@ -13,6 +15,8 @@ const NAV = [
 export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   return (
     <div className="min-h-screen bg-background">
+      <AdOnOpen />
+      <ChatAI />
       <main className="mx-auto max-w-md px-4 pb-32 pt-6">
         {title && <h1 className="mb-4 text-2xl font-extrabold tracking-tight">{title}</h1>}
         {children}
